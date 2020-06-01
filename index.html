@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>4458</title>
+  <meta charset="UTF-8">
+  <title>4458</title>
 </head>
 <body style="background-color:black">
 <center>
@@ -11,23 +11,57 @@
   <h1 id="h1" style="color: white">Loading…</h1>
 </center>
 
-  <audio id="audio" preload="auto">
-      <source src="/static/Love Is In Bloom (Archie Remix)-h3SZkKOZ5fo.mp3" type="audio/mpeg" preload="auto" />
-      <!--<source src="Love Is In Bloom (Archie Remix)-h3SZkKOZ5fo.ogg" type="audio/ogg" />-->
-  </audio>
+<audio id="audio" preload="auto">
+  <source src="/static/Love Is In Bloom (Archie Remix)-h3SZkKOZ5fo.mp3" type="audio/mpeg" preload="auto" />
+  <!--<source src="Love Is In Bloom (Archie Remix)-h3SZkKOZ5fo.ogg" type="audio/ogg" />-->
+</audio>
 <style>
   #img {
     opacity: 0
   }
+
   #img.animate {
     animation: fade 6s linear;
     animation-delay: 0s;
     opacity: 1;
-}
+  }
+
   @keyframes fade {
-    0%, 98% { opacity: 0 }
-    100% { opacity: 1 }
-}
+    0%, 98% {
+      opacity: 0
+    }
+    100% {
+      opacity: 1
+    }
+  }
+
+  #progress {
+    position: relative;
+
+    display: block;
+    margin: 10px auto;
+
+    width: 320px;
+    height: 20px;
+
+    border: 2px solid #666;
+
+    background: #ddd;
+  }
+
+  #progress > span {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    display: inline-block;
+
+    height: 20px;
+
+    background: #6c0;
+
+    box-shadow: inset 0 0 0 1px #ddd, inset 0 0 0 2px #390;
+  }
 </style>
 <script>
   var audioSprite = document.getElementById('audio');
@@ -36,28 +70,64 @@
 
 
   audioSprite.addEventListener('canplaythrough', function () {
-    console.log("canplaythrough");
+    console.log('canplaythrough');
     audioSprite.currentTime = 175;
     audioSprite.loop = true;
     document.body.addEventListener('click', function () {
+      console.log('click');
       audioSprite.play();
       img.classList.add('animate');
       h1.innerText = '';
+      audioSprite.addEventListener('timeupdate', function () {
+        console.log('timeupdate');
+        if (!this.paused && this.currentTime > this.duration - 10) {
+          this.currentTime = 0;
+          this.play();
+        }
+      }, false);
+      audioSprite.addEventListener('ended', function () {
+        console.log('ended');
+        this.currentTime = 0;
+        this.play();
+      }, false);
     }, false);
     h1.innerText = 'CLICK TO START';
   })
-  audioSprite.addEventListener('timeupdate', function() {
-    console.log("timeupdate");
-    if (!this.paused && this.currentTime > this.duration - 10) {
-      this.currentTime = 0;
-      this.play();
+
+  //define a progress abstraction
+  function onprogress() {
+    //get the buffered ranges data
+    var ranges = [];
+    for (var i = 0; i < media.buffered.length; i++) {
+      ranges.push([
+        media.buffered.start(i),
+        media.buffered.end(i)
+      ]);
     }
-  }, false);
-  audioSprite.addEventListener('ended', function() {
-    console.log("ended");
-    this.currentTime = 0;
-    this.play();
-  }, false);
+
+    //get the current collection of spans inside the container
+    var spans = progress.getElementsByTagName('span');
+
+    //then add or remove spans so we have the same number as time ranges
+    while (spans.length < media.buffered.length) {
+      progress.appendChild(document.createElement('span'));
+    }
+    while (spans.length > media.buffered.length) {
+      progress.removeChild(progress.lastChild);
+    }
+
+    //now iterate through the ranges and convert each set of timings
+    //to a percentage position and width for the corresponding span
+    for (var i = 0; i < media.buffered.length; i++) {
+      spans[i].style.left = Math.round((100 / media.duration) /* the width of 1s */  * ranges[i][0]) + '%';
+      spans[i].style.width = Math.round((100 / media.duration) /* the width of 1s */ * (ranges[i][1] - ranges[i][0])) + '%';
+    }
+  }
+
+  //bind progress and loadedmetadata events to call the progress abstraction
+  media.addEventListener('progress', onprogress, false);
+  media.addEventListener('loadedmetadata', onprogress, false);
+
 </script>
 </body>
 </html>
