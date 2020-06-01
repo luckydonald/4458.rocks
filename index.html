@@ -36,6 +36,7 @@
 
 
   audioSprite.addEventListener('canplaythrough', function () {
+    console.log("can play through full video")
     audioSprite.currentTime = 175;
     audioSprite.loop = true;
     document.body.addEventListener('click', function () {
