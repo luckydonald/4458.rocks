@@ -36,7 +36,7 @@
 
 
   audioSprite.addEventListener('canplaythrough', function () {
-    console.log("can play through full video")
+    console.log("canplaythrough");
     audioSprite.currentTime = 175;
     audioSprite.loop = true;
     document.body.addEventListener('click', function () {
@@ -47,12 +47,14 @@
     h1.innerText = 'CLICK TO START';
   })
   audioSprite.addEventListener('timeupdate', function() {
+    console.log("timeupdate");
     if (!this.paused && this.currentTime > this.duration - 10) {
       this.currentTime = 0;
       this.play();
     }
   }, false);
   audioSprite.addEventListener('ended', function() {
+    console.log("ended");
     this.currentTime = 0;
     this.play();
   }, false);
