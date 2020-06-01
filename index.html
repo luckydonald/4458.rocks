@@ -8,7 +8,7 @@
 <center>
   <img id="img" style="" src="static/39004.gif" />
   <!--<img id="img" style="" src="https://derpicdn.net/img/view/2012/7/10/39004.gif" />-->
-  <h1 id="h1" style="color: white">Loading…</h1>
+  <h1 id="h1" style="color: white">Click to load…</h1>
   <div id="progress">Loading...</div>
 </center>
 
@@ -81,6 +81,7 @@
   var unloaded_onclick = function () {
     audioSprite.play();
     audioSprite.stop();
+    h1.innerText = 'Loading...';
   };
   document.body.addEventListener('click', unloaded_onclick, false);
   var canplaythrough = function () {
