@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>4458</title>
+</head>
+<body style="background-color:black">
+<center>
+  <img id="img" style="" src="/static/39004.gif" />
+  <!--<img id="img" style="" src="https://derpicdn.net/img/view/2012/7/10/39004.gif" />-->
+  <h1 id="h1" style="color: white">Loading…</h1>
+</center>
+
+  <audio id="audio" preload="auto">
+      <source src="/static/Love Is In Bloom (Archie Remix)-h3SZkKOZ5fo.mp3" type="audio/mpeg" preload="auto" />
+      <!--<source src="Love Is In Bloom (Archie Remix)-h3SZkKOZ5fo.ogg" type="audio/ogg" />-->
+  </audio>
+<style>
+  #img {
+    opacity: 0
+  }
+  #img.animate {
+    animation: fade 6s linear;
+    animation-delay: 0s;
+    opacity: 1;
+}
+  @keyframes fade {
+    0%, 98% { opacity: 0 }
+    100% { opacity: 1 }
+}
+</style>
+<script>
+  var audioSprite = document.getElementById('audio');
+  var img = document.getElementById('img')
+  var h1 = document.getElementById('h1')
+
+
+  audioSprite.addEventListener('canplaythrough', function () {
+    audioSprite.currentTime = 175;
+    audioSprite.loop = true;
+    document.body.addEventListener('click', function () {
+      audioSprite.play();
+      img.classList.add('animate');
+      h1.innerText = '';
+    }, false);
+    h1.innerText = 'CLICK TO START';
+  })
+  audioSprite.addEventListener('timeupdate', function() {
+    if (!this.paused && this.currentTime > this.duration - 10) {
+      this.currentTime = 0;
+      this.play();
+    }
+  }, false);
+  audioSprite.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+  }, false);
+</script>
+</body>
+</html>
