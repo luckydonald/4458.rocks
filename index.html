@@ -70,18 +70,26 @@
   var h1 = document.getElementById('h1')
   var progress = document.getElementById('progress')
 
+
+  var loaded_onclick = function () {
+    console.log('click');
+    audioSprite.play();
+    img.classList.add('animate');
+    h1.innerText = '';
+    progress.remove();
+  };
+  var unloaded_onclick = function () {
+    audioSprite.play();
+    audioSprite.stop();
+  };
+  document.body.addEventListener('click', unloaded_onclick, false);
   var canplaythrough = function () {
     console.log('canplaythrough');
     audioSprite.removeEventListener('canplaythrough', canplaythrough);
     audioSprite.currentTime = 175;
     audioSprite.loop = true;
-    document.body.addEventListener('click', function () {
-      console.log('click');
-      audioSprite.play();
-      img.classList.add('animate');
-      h1.innerText = '';
-      progress.remove();
-    }, false);
+    document.body.addEventListener('click', loaded_onclick, false);
+    document.body.removeEventListener('click', unloaded_onclick);
     h1.innerText = 'CLICK TO START';
   }
   audioSprite.addEventListener('canplaythrough', canplaythrough, false);
