@@ -80,8 +80,9 @@
   };
   var unloaded_onclick = function () {
     audioSprite.play();
-    audioSprite.stop();
     h1.innerText = 'Loading...';
+    audioSprite.pause();
+    audioSprite.stop();
   };
   document.body.addEventListener('click', unloaded_onclick, false);
   var canplaythrough = function () {
